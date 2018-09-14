@@ -1,7 +1,11 @@
 'use strict';
 
+// multer makes this super easy
+
 var express = require('express');
 var cors = require('cors');
+var multer  = require('multer');
+var upload = multer({ dest: 'uploads/' });
 
 // require and use "multer"...
 
@@ -17,6 +21,11 @@ app.get('/', function (req, res) {
 app.get('/hello', function(req, res){
   res.json({greetings: "Hello, API"});
 });
+
+app.post('/api/fileanalyse', upload.single('upfile'), function (req, res, next) {
+  //console.log(req.file);
+  res.json({name: req.file.originalname, type: req.file.mimetype, size: req.file.size});
+})
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('Node.js listening ...');
